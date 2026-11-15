@@ -1,7 +1,7 @@
 # main.py
 from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
 import pickle
@@ -77,7 +77,22 @@ def get_slots(request: DateRequest):
 
     date_str = dt.strftime("%Y-%m-%d")
 
-    API_KEY = "ZXY7Q67T3BWC9C3NYSE4QR65Z"
+    API_KEY = os.getenv("VISUAL_CROSSING_API_KEY")
+
+
+    if not API_KEY:
+
+
+        raise HTTPException(
+
+
+            status_code=503,
+
+
+            detail="Weather service is not configured. Set VISUAL_CROSSING_API_KEY.",
+
+
+        )
     api_url = (
         f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
         f"40.3766,49.8516/{date_str}"
